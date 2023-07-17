@@ -1,4 +1,4 @@
-import playlist from './playlist.js';
+import playlist from './model/playlist.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export const playSongById = (req, res) => {
@@ -21,6 +21,8 @@ export const playSongById = (req, res) => {
       let songURL = playlist[index].url;
 
       if (playlist[index].isPlaying) {
+        // increment playCount by 1
+        playlist[index].playCount++;
         return res.status(200).json({
           message: 'Song is playing!',
           url: songURL,
@@ -50,6 +52,18 @@ export const getAllPlaylist = (req, res) => {
     });
   }
 
+  // get query params
+  const { order_by_play } = req.query;
+  if (order_by_play) {
+    return res.status(200).json({
+      total_song: playlist.length,
+      playlist:
+        order_by_play == 'asc'
+          ? playlist.sort((a, b) => a.playCount - b.playCount)
+          : playlist.sort((a, b) => b.playCount - a.playCount),
+    });
+  }
+
   return res.status(200).json({
     total_song: playlist.length,
     playlist,
@@ -58,7 +72,7 @@ export const getAllPlaylist = (req, res) => {
 
 export const addNewPlaylist = (req, res) => {
   // get request body
-  let { title, artists, url } = req.body;
+  let { title, artists, url, playcount } = req.body;
 
   // check if the value data type is correct
   let titleCorrect = typeof title === 'string';
@@ -91,6 +105,7 @@ export const addNewPlaylist = (req, res) => {
     artists: artists.map((artist) => artist.trim()),
     url: url.trim(),
     isPlaying: false,
+    playCount: playcount,
   });
 
   // get id of the new song
