@@ -12,23 +12,25 @@ export const playSongById = (req, res) => {
     });
   }
 
-  // check song in the playlist
+  let songFound = false; // Flag to track if the song is found in the playlist
+
   playlist.find((song, index) => {
     if (song.id === id) {
+      songFound = true; // Set the flag to true since the song is found
+
       // change isPlaying from true to false || false to true
       playlist[index].isPlaying = !playlist[index].isPlaying;
 
       let songURL = playlist[index].url;
 
       if (playlist[index].isPlaying) {
-        // increment playCount by 1
         playlist[index].playCount++;
-        return res.status(200).json({
+        res.status(200).json({
           message: 'Song is playing!',
           url: songURL,
         });
       } else {
-        return res.status(200).json({
+        res.status(200).json({
           message: 'Song is stopped!',
           url: songURL,
         });
@@ -37,9 +39,11 @@ export const playSongById = (req, res) => {
   });
 
   // if the song is not found in the playlist
-  return res.status(404).json({
-    message: 'Song not found!',
-  });
+  if (!songFound) {
+    res.status(404).json({
+      message: 'Song not found!',
+    });
+  }
 };
 
 export const getAllPlaylist = (req, res) => {
@@ -64,7 +68,7 @@ export const getAllPlaylist = (req, res) => {
     });
   }
 
-  return res.status(200).json({
+  res.status(200).json({
     total_song: playlist.length,
     playlist,
   });
@@ -130,20 +134,25 @@ export const deleteSongById = (req, res) => {
     });
   }
 
+  let songFound = false; // Flag to track if the song is found in the playlist
+
   playlist.find((song, index) => {
     if (song.id === id) {
+      songFound = true;
       // delete the song from playlist
       playlist.splice(index, 1);
-      return res.status(200).json({
+      res.status(200).json({
         message: 'Song deleted!',
       });
     }
+  });
 
+  if (!songFound) {
     // if the song is not found in the playlist
-    return res.status(404).json({
+    res.status(404).json({
       message: 'Song not found!',
     });
-  });
+  }
 };
 
 export const updateSongById = (req, res) => {
@@ -187,22 +196,27 @@ export const updateSongById = (req, res) => {
     });
   }
 
+  let songFound = false; // Flag to track if the song is found in the playlist
+
   playlist.find((song, index) => {
     // check if the song id is the same as in params
     if (song.id === id) {
+      songFound = true;
       // change values with new ones
       playlist[index].title = newTitle.trim();
       playlist[index].artists = newArtists.map((newArtist) => newArtist.trim());
       playlist[index].url = newUrl.trim();
 
-      return res.status(200).json({
+      res.status(200).json({
         message: 'Song updated!',
       });
     }
+  });
 
+  if (!songFound) {
     // if the song is not found in the playlist
-    return res.status(404).json({
+    res.status(404).json({
       message: 'Song not found!',
     });
-  });
+  }
 };
