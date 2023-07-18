@@ -6,24 +6,24 @@
 Method : GET
 Endpoint : "/playlist"
 Query :
-order*by_play: string ("asc"/"des") \_OPTIONAL*
+order_by_play: string ("asc"/"des") **OPTIONAL**
 ```
 
-# addNewSongToPlayList :
+## addNewSongToPlayList :
 
 ```
 Method : POST
 Endpoint : "/playlist"
 Request Body :
 {
-"title": string,
-"artists": [string],
-"url": string,
-"playcount": int
+    "title": string,
+    "artists": [string],
+    "url": string,
+    "playcount": int
 }
 ```
 
-# deleteSongById :
+## deleteSongById :
 
 ```
 Method : DELETE
@@ -37,9 +37,9 @@ Method : PUT
 Endpoint : "/playlist/:id"
 Request Body :
 {
-"title": string,
-"artists": [string],
-"url": string,
+    "title": string,
+    "artists": [string],
+    "url": string,
 }
 ```
 
