@@ -109,7 +109,7 @@ export const addNewPlaylist = (req, res) => {
     artists: artists.map((artist) => artist.trim()),
     url: url.trim(),
     isPlaying: false,
-    playCount: playcount,
+    playCount: playcount || 0,
   });
 
   // get id of the new song
