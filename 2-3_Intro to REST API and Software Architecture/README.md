@@ -30,7 +30,7 @@ Method : DELETE
 Endpoint : "/playlist/:id"
 ```
 
-# updateSongById :
+## updateSongById :
 
 ```
 Method : PUT
@@ -43,7 +43,7 @@ Request Body :
 }
 ```
 
-# playSongById :
+## playSongById :
 
 ```
 Method : PUT
